@@ -3,19 +3,18 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { applicationSchema, type ApplicationFormData } from '@/lib/validation';
-import { Github, Linkedin, Mail, User, Code, Briefcase, Clock, X, FileText, Phone, Globe } from 'lucide-react';
+import { Github, Linkedin, Mail, User, Code, Briefcase, Clock, FileText, CheckCircle, Phone, Globe } from 'lucide-react';
 import FileUpload from '@/components/FileUpload';
 
 const popularSkills = [
   'JavaScript', 'TypeScript', 'React', 'Node.js', 'Python', 'Java', 'Go', 'Rust',
-  'Docker', 'Kubernetes', 'AWS', 'MongoDB', 'PostgreSQL', 'GraphQL', 'Next.js', 'Vue.js',
-  'UI/UX', 'Flutter', 'PHP', 'Figma'
+  'Docker', 'Kubernetes', 'AWS', 'MongoDB', 'PostgreSQL', 'GraphQL', 'Next.js', 'Vue.js'
 ];
 
 const countries = [
@@ -41,13 +40,12 @@ const countries = [
   'Vatican City', 'Venezuela', 'Vietnam', 'Yemen', 'Zambia', 'Zimbabwe'
 ];
 
-export default function HomePage() {
+export default function ApplicationForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
-  const [showWelcomeModal, setShowWelcomeModal] = useState(true);
-  const [uploadedResumeUrl, setUploadedResumeUrl] = useState<string>('');
-  const [uploadedResumeFileName, setUploadedResumeFileName] = useState<string>('');
+  const [resumeFileName, setResumeFileName] = useState<string>('');
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const {
     register,
@@ -68,16 +66,18 @@ export default function HomePage() {
     setValue('skills', newSkills);
   };
 
-  const handleFileUpload = (url: string, fileName: string) => {
-    setUploadedResumeUrl(url);
-    setUploadedResumeFileName(fileName);
+  const handleResumeUpload = (url: string, fileName: string) => {
     setValue('resumeUrl', url);
+    setResumeFileName(fileName);
   };
 
-  const handleRemoveFile = () => {
-    setUploadedResumeUrl('');
-    setUploadedResumeFileName('');
+  const handleResumeRemove = () => {
     setValue('resumeUrl', '');
+    setResumeFileName('');
+  };
+
+  const handleVisitProdg = () => {
+    window.location.href = 'https://prodg.studio';
   };
 
   const onSubmit = async (data: ApplicationFormData) => {
@@ -90,21 +90,16 @@ export default function HomePage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 
-          ...data, 
-          skills: selectedSkills,
-          resumeUrl: uploadedResumeUrl || data.resumeUrl 
-        }),
+        body: JSON.stringify({ ...data, skills: selectedSkills }),
       });
 
       const result = await response.json();
 
       if (response.ok) {
-        setSubmitMessage('Application submitted successfully! We\'ll be in touch soon.');
+        setShowSuccessModal(true);
         reset();
         setSelectedSkills([]);
-        setUploadedResumeUrl('');
-        setUploadedResumeFileName('');
+        setResumeFileName('');
       } else {
         setSubmitMessage(result.error || 'Something went wrong. Please try again.');
       }
@@ -118,49 +113,42 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
       {/* Background effects */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(100,100,100,0.1),transparent_50%)]" />
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-gray-500/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gray-400/10 rounded-full blur-3xl" />
-
-      {/* Welcome Modal */}
-      <AnimatePresence>
-        {showWelcomeModal && (
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(6,182,212,0.1),transparent_50%)]" />
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
+      
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm">
           <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-slate-800 border border-slate-700 rounded-2xl p-8 max-w-md mx-4 text-center"
           >
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-slate-800 rounded-2xl border border-slate-700/50 p-8 max-w-md w-full relative"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+              className="w-16 h-16 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6"
             >
-              <button
-                onClick={() => setShowWelcomeModal(false)}
-                className="absolute top-4 right-4 text-gray-400 hover:text-white transition-colors"
-              >
-                <X className="w-5 h-5" />
-              </button>
-              
-              <div className="text-center mb-6">
-                <h2 className="text-2xl font-bold text-white mb-4">Welcome to ProDG Studios</h2>
-                <p className="text-gray-300 leading-relaxed">
-                  Collaborate on innovative projects, grow your skills, and be part of a community that&apos;s shaping tomorrow&apos;s technology.
-                </p>
-              </div>
-              
-              <Button 
-                onClick={() => setShowWelcomeModal(false)}
-                className="w-full"
-              >
-                Start Your Application
-              </Button>
+              <CheckCircle className="w-8 h-8 text-green-400" />
             </motion.div>
+            
+            <h2 className="text-2xl font-bold text-white mb-4">Application Successful!</h2>
+            <p className="text-slate-300 mb-8">
+              Thank you for your application. We&apos;ll be in touch soon!
+            </p>
+            
+            <Button
+              onClick={handleVisitProdg}
+              className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600"
+              size="lg"
+            >
+              Visit PRODG
+            </Button>
           </motion.div>
-        )}
-      </AnimatePresence>
+        </div>
+      )}
       
       <div className="relative z-10 container mx-auto px-4 py-12">
         <motion.div
@@ -175,17 +163,18 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-4xl md:text-6xl font-bold text-white mb-6"
+              className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent mb-6"
             >
-              Join ProDG
+              Join Our Dev Team
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-lg md:text-xl text-gray-400 max-w-xl mx-auto"
+              className="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed"
             >
-              Code. Collaborate. Grow.
+              We&apos;re a cutting-edge development company pushing the boundaries of technology. 
+              We build the future, one line of code at a time. Are you ready to shape tomorrow with us?
             </motion.p>
           </div>
 
@@ -201,23 +190,23 @@ export default function HomePage() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="name" className="flex items-center gap-2">
-                    <User className="w-4 h-4 text-gray-400" />
+                    <User className="w-4 h-4 text-cyan-400" />
                     Full Name *
                   </Label>
                   <Input
                     id="name"
                     {...register('name')}
                     placeholder="Your full name"
-                    className={errors.name ? 'border-gray-600' : ''}
+                    className={errors.name ? 'border-red-500' : ''}
                   />
                   {errors.name && (
-                    <p className="text-gray-500 text-sm">{errors.name.message}</p>
+                    <p className="text-red-500 text-sm">{errors.name.message}</p>
                   )}
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="email" className="flex items-center gap-2">
-                    <Mail className="w-4 h-4 text-gray-400" />
+                    <Mail className="w-4 h-4 text-cyan-400" />
                     Email Address *
                   </Label>
                   <Input
@@ -225,10 +214,10 @@ export default function HomePage() {
                     type="email"
                     {...register('email')}
                     placeholder="your.email@example.com"
-                    className={errors.email ? 'border-gray-600' : ''}
+                    className={errors.email ? 'border-red-500' : ''}
                   />
                   {errors.email && (
-                    <p className="text-gray-500 text-sm">{errors.email.message}</p>
+                    <p className="text-red-500 text-sm">{errors.email.message}</p>
                   )}
                 </div>
               </div>
@@ -237,28 +226,28 @@ export default function HomePage() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="phone" className="flex items-center gap-2">
-                    <Phone className="w-4 h-4 text-gray-400" />
+                    <Phone className="w-4 h-4 text-cyan-400" />
                     Phone Number *
                   </Label>
                   <Input
                     id="phone"
                     {...register('phone')}
                     placeholder="+254 712 345 678"
-                    className={errors.phone ? 'border-gray-600' : ''}
+                    className={errors.phone ? 'border-red-500' : ''}
                   />
                   {errors.phone && (
-                    <p className="text-gray-500 text-sm">{errors.phone.message}</p>
+                    <p className="text-red-500 text-sm">{errors.phone.message}</p>
                   )}
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="country" className="flex items-center gap-2">
-                    <Globe className="w-4 h-4 text-gray-400" />
+                    <Globe className="w-4 h-4 text-cyan-400" />
                     Country *
                   </Label>
                   <select
                     {...register('country')}
-                    className={`flex h-10 w-full rounded-md border ${errors.country ? 'border-gray-600' : 'border-slate-700'} bg-slate-800/50 px-3 py-2 text-sm text-slate-50 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50`}
+                    className={`flex h-10 w-full rounded-md border ${errors.country ? 'border-red-500' : 'border-slate-700'} bg-slate-800/50 px-3 py-2 text-sm text-slate-50 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50`}
                   >
                     <option value="" className="bg-slate-800 text-slate-400">Select your country</option>
                     {countries.map((country) => (
@@ -268,7 +257,7 @@ export default function HomePage() {
                     ))}
                   </select>
                   {errors.country && (
-                    <p className="text-gray-500 text-sm">{errors.country.message}</p>
+                    <p className="text-red-500 text-sm">{errors.country.message}</p>
                   )}
                 </div>
               </div>
@@ -277,33 +266,33 @@ export default function HomePage() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="github" className="flex items-center gap-2">
-                    <Github className="w-4 h-4 text-gray-400" />
+                    <Github className="w-4 h-4 text-cyan-400" />
                     GitHub Profile *
                   </Label>
                   <Input
                     id="github"
                     {...register('github')}
                     placeholder="https://github.com/username"
-                    className={errors.github ? 'border-gray-600' : ''}
+                    className={errors.github ? 'border-red-500' : ''}
                   />
                   {errors.github && (
-                    <p className="text-gray-500 text-sm">{errors.github.message}</p>
+                    <p className="text-red-500 text-sm">{errors.github.message}</p>
                   )}
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="linkedin" className="flex items-center gap-2">
-                    <Linkedin className="w-4 h-4 text-gray-400" />
+                    <Linkedin className="w-4 h-4 text-cyan-400" />
                     LinkedIn Profile *
                   </Label>
                   <Input
                     id="linkedin"
                     {...register('linkedin')}
                     placeholder="https://linkedin.com/in/username"
-                    className={errors.linkedin ? 'border-gray-600' : ''}
+                    className={errors.linkedin ? 'border-red-500' : ''}
                   />
                   {errors.linkedin && (
-                    <p className="text-gray-500 text-sm">{errors.linkedin.message}</p>
+                    <p className="text-red-500 text-sm">{errors.linkedin.message}</p>
                   )}
                 </div>
               </div>
@@ -311,41 +300,41 @@ export default function HomePage() {
               {/* Background Description */}
               <div className="space-y-2">
                 <Label htmlFor="backgroundDescription" className="flex items-center gap-2">
-                  <User className="w-4 h-4 text-gray-400" />
-                  Professional Background *
+                  <User className="w-4 h-4 text-cyan-400" />
+                  Professional Background * (max 10 characters)
                 </Label>
                 <Textarea
                   id="backgroundDescription"
                   {...register('backgroundDescription')}
-                  placeholder="Tell us about your professional journey, education, and what drives you as a developer..."
-                  className={`min-h-[120px] ${errors.backgroundDescription ? 'border-gray-600' : ''}`}
+                  placeholder="Tell us about your professional journey..."
+                  className={`min-h-[120px] ${errors.backgroundDescription ? 'border-red-500' : ''}`}
                 />
                 {errors.backgroundDescription && (
-                  <p className="text-gray-500 text-sm">{errors.backgroundDescription.message}</p>
+                  <p className="text-red-500 text-sm">{errors.backgroundDescription.message}</p>
                 )}
               </div>
 
               {/* Experience */}
               <div className="space-y-2">
                 <Label htmlFor="experience" className="flex items-center gap-2">
-                  <Briefcase className="w-4 h-4 text-gray-400" />
-                  Development Experience *
+                  <Briefcase className="w-4 h-4 text-cyan-400" />
+                  Development Experience * (max 10 characters)
                 </Label>
                 <Textarea
                   id="experience"
                   {...register('experience')}
-                  placeholder="Describe your development experience, notable projects, and technical achievements..."
-                  className={`min-h-[100px] ${errors.experience ? 'border-gray-600' : ''}`}
+                  placeholder="Describe your development experience..."
+                  className={`min-h-[100px] ${errors.experience ? 'border-red-500' : ''}`}
                 />
                 {errors.experience && (
-                  <p className="text-gray-500 text-sm">{errors.experience.message}</p>
+                  <p className="text-red-500 text-sm">{errors.experience.message}</p>
                 )}
               </div>
 
               {/* Skills */}
               <div className="space-y-4">
                 <Label className="flex items-center gap-2">
-                  <Code className="w-4 h-4 text-gray-400" />
+                  <Code className="w-4 h-4 text-cyan-400" />
                   Technical Skills * (Select all that apply)
                 </Label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -358,7 +347,7 @@ export default function HomePage() {
                       whileTap={{ scale: 0.95 }}
                       className={`p-3 rounded-lg border text-sm font-medium transition-all duration-300 ${
                         selectedSkills.includes(skill)
-                          ? 'bg-gray-700/40 border-gray-400 text-gray-200 shadow-lg shadow-gray-700/20'
+                          ? 'bg-cyan-500/20 border-cyan-400 text-cyan-300 shadow-lg shadow-cyan-500/20'
                           : 'bg-slate-700/30 border-slate-600 text-slate-300 hover:border-slate-500'
                       }`}
                     >
@@ -367,81 +356,80 @@ export default function HomePage() {
                   ))}
                 </div>
                 {errors.skills && (
-                  <p className="text-gray-500 text-sm">{errors.skills.message}</p>
+                  <p className="text-red-500 text-sm">{errors.skills.message}</p>
                 )}
               </div>
 
               {/* Optional Fields */}
-              <div className="space-y-6">
+              <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <Label htmlFor="portfolioUrl">Portfolio URL</Label>
                   <Input
                     id="portfolioUrl"
                     {...register('portfolioUrl')}
                     placeholder="https://yourportfolio.com"
-                    className={errors.portfolioUrl ? 'border-gray-600' : ''}
+                    className={errors.portfolioUrl ? 'border-red-500' : ''}
                   />
                   {errors.portfolioUrl && (
-                    <p className="text-gray-500 text-sm">{errors.portfolioUrl.message}</p>
+                    <p className="text-red-500 text-sm">{errors.portfolioUrl.message}</p>
                   )}
                 </div>
 
                 <div className="space-y-2">
                   <Label className="flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-gray-400" />
-                    Resume Upload
+                    <FileText className="w-4 h-4 text-cyan-400" />
+                    Upload Resume
                   </Label>
                   <FileUpload
-                    onFileUpload={handleFileUpload}
-                    onRemove={handleRemoveFile}
-                    currentFileName={uploadedResumeFileName}
+                    onFileUpload={handleResumeUpload}
+                    onRemove={handleResumeRemove}
+                    currentFileName={resumeFileName}
+                    disabled={isSubmitting}
                   />
                   {errors.resumeUrl && (
-                    <p className="text-gray-500 text-sm">{errors.resumeUrl.message}</p>
+                    <p className="text-red-500 text-sm">{errors.resumeUrl.message}</p>
                   )}
                 </div>
               </div>
 
               {/* Motivation */}
               <div className="space-y-2">
-                <Label htmlFor="motivation">Why do you want to join us? *</Label>
+                <Label htmlFor="motivation">Why do you want to join us? * (max 10 characters)</Label>
                 <Textarea
                   id="motivation"
                   {...register('motivation')}
-                  placeholder="What excites you about working with us? How do you see yourself contributing to our mission?"
-                  className={`min-h-[100px] ${errors.motivation ? 'border-gray-600' : ''}`}
+                  placeholder="What excites you about working with us?"
+                  className={`min-h-[100px] ${errors.motivation ? 'border-red-500' : ''}`}
                 />
                 {errors.motivation && (
-                  <p className="text-gray-500 text-sm">{errors.motivation.message}</p>
+                  <p className="text-red-500 text-sm">{errors.motivation.message}</p>
                 )}
               </div>
 
-              {/* Availability */}
-              <div className="grid md:grid-cols-1 gap-6">
-                <div className="space-y-2">
-                  <Label htmlFor="availability" className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-gray-400" />
-                    Weekly Availability *
-                  </Label>
-                  <Input
-                    id="availability"
-                    {...register('availability')}
-                    placeholder="e.g., 20 hours per week, flexible schedule"
-                    className={errors.availability ? 'border-gray-600' : ''}
-                  />
-                  {errors.availability && (
-                    <p className="text-gray-500 text-sm">{errors.availability.message}</p>
-                  )}
-                </div>
+              {/* Availability & Salary */}
+              <div className="space-y-2">
+                <Label htmlFor="availability" className="flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-cyan-400" />
+                  Availability *
+                </Label>
+                <Input
+                  id="availability"
+                  {...register('availability')}
+                  placeholder="e.g., Immediately, 2 weeks notice, etc."
+                  className={errors.availability ? 'border-red-500' : ''}
+                />
+                {errors.availability && (
+                  <p className="text-red-500 text-sm">{errors.availability.message}</p>
+                )}
               </div>
 
               {/* Submit */}
-              <div className="pt-6 flex justify-center">
+              <div className="pt-6">
                 <Button
                   type="submit"
                   disabled={isSubmitting}
                   size="lg"
-                  className="px-12"
+                  className="w-full md:w-auto px-12"
                 >
                   {isSubmitting ? 'Submitting...' : 'Submit Application'}
                 </Button>
@@ -454,8 +442,8 @@ export default function HomePage() {
                   animate={{ opacity: 1, y: 0 }}
                   className={`p-4 rounded-lg border ${
                     submitMessage.includes('successfully')
-                      ? 'bg-gray-600/10 border-gray-400/20 text-gray-300'
-                      : 'bg-gray-800/10 border-gray-600/20 text-gray-400'
+                      ? 'bg-green-500/10 border-green-400/20 text-green-400'
+                      : 'bg-red-500/10 border-red-400/20 text-red-400'
                   }`}
                 >
                   {submitMessage}
@@ -467,4 +455,4 @@ export default function HomePage() {
       </div>
     </div>
   );
-}
+} 
