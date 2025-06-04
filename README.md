@@ -32,6 +32,18 @@ A cutting-edge developer applications platform built with Next.js, MongoDB, and 
 - **UI Components**: Custom components with shadcn/ui patterns
 - **Icons**: Lucide React
 
+## Documentation
+
+For detailed documentation about the platform, please refer to the [docs](./docs/) directory. The documentation is organized into the following sections:
+
+- **[API Documentation](./docs/api/)** - API specifications and usage guides
+- **[Feature Documentation](./docs/features/)** - Implementation details for major features
+- **[Product Requirements](./docs/prd/)** - Product requirement documents (PRDs)
+- **[Migration Guides](./docs/migrations/)** - Summaries of data migrations and integration processes
+- **[Setup Guides](./docs/setup/)** - Installation and configuration instructions
+
+For a high-level overview of the entire platform, see [Overview](./docs/Overview.md).
+
 ## Getting Started
 
 ### Prerequisites
@@ -88,6 +100,8 @@ src/
 ```
 
 ## API Endpoints
+
+For detailed API documentation, see the [API Documentation](./docs/api/API_DOCUMENTATION.md) and [Swagger Specification](./docs/api/swagger.yaml).
 
 ### Applications
 - `GET /api/applications` - Get all applications (with filtering)

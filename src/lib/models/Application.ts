@@ -17,6 +17,22 @@ export interface IApplication {
   availability: string;
   createdAt: Date;
   status: 'pending' | 'reviewing' | 'approved' | 'rejected';
+  // Analytics fields
+  viewCount: number;
+  lastViewed: Date;
+  timeToReview?: number; // in hours
+  reviewerId?: string;
+  // Applicant Dashboard fields
+  lastLoginAt?: Date;
+  communicationEnabled: boolean;
+  feedbackMessage?: string;
+  reviewNotes?: string; // visible to applicant
+  estimatedDecisionDate?: Date;
+  applicantNotifications: {
+    email: boolean;
+    statusUpdates: boolean;
+    messages: boolean;
+  };
 }
 
 const ApplicationSchema = new mongoose.Schema<IApplication>({
@@ -88,7 +104,69 @@ const ApplicationSchema = new mongoose.Schema<IApplication>({
     enum: ['pending', 'reviewing', 'approved', 'rejected'],
     default: 'pending',
   },
+  // Analytics fields
+  viewCount: {
+    type: Number,
+    default: 0,
+  },
+  lastViewed: {
+    type: Date,
+    default: Date.now,
+  },
+  timeToReview: {
+    type: Number, // in hours
+    required: false,
+  },
+  reviewerId: {
+    type: String,
+    required: false,
+  },
+  // Applicant Dashboard fields
+  lastLoginAt: {
+    type: Date,
+    required: false,
+  },
+  communicationEnabled: {
+    type: Boolean,
+    required: true,
+    default: true,
+  },
+  feedbackMessage: {
+    type: String,
+    required: false,
+  },
+  reviewNotes: {
+    type: String,
+    required: false,
+  },
+  estimatedDecisionDate: {
+    type: Date,
+    required: false,
+  },
+  applicantNotifications: {
+    email: {
+      type: Boolean,
+      required: true,
+      default: true,
+    },
+    statusUpdates: {
+      type: Boolean,
+      required: true,
+      default: true,
+    },
+    messages: {
+      type: Boolean,
+      required: true,
+      default: true,
+    },
+  },
 });
+
+// Add indexes for analytics queries
+ApplicationSchema.index({ createdAt: -1 });
+ApplicationSchema.index({ status: 1, createdAt: -1 });
+ApplicationSchema.index({ country: 1 });
+ApplicationSchema.index({ skills: 1 });
 
 const Application = mongoose.models.Application || mongoose.model<IApplication>('Application', ApplicationSchema);
 

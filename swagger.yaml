@@ -1,0 +1,730 @@
+openapi: 3.0.0
+info:
+  title: Applicant Dashboard API
+  description: |
+    # Applicant Dashboard API Documentation
+    
+    This API provides access to the Applicant Dashboard system, allowing applicants to track their application status, 
+    communicate with the recruitment team, and manage their application details.
+    
+    ## Key Features
+    - Magic link authentication for secure access
+    - Application status tracking
+    - Two-way communication
+    - Personalized insights and updates
+  version: 1.0.0
+  contact:
+    name: ProDG Support Team
+    email: support@prodg.studio
+    url: https://prodg.studio/support
+  license:
+    name: Proprietary
+    url: https://prodg.studio/terms
+  
+servers:
+  - url: /api
+    description: Production API server
+  - url: http://localhost:3000/api
+    description: Local development server
+
+tags:
+  - name: Authentication
+    description: Endpoints for authentication and session management
+  - name: Application
+    description: Endpoints for viewing and managing application data
+  - name: Communication
+    description: Endpoints for applicant-recruiter communication
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: applicant_session
+      description: HTTP-only cookie containing the session token for authentication
+  
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message describing what went wrong
+      required:
+        - error
+      example:
+        error: "Application not found"
+    
+    ApplicationStatus:
+      type: string
+      enum:
+        - pending
+        - reviewing
+        - approved
+        - rejected
+      description: The current status of an application
+    
+    NotificationSettings:
+      type: object
+      properties:
+        email:
+          type: boolean
+          description: Whether to send email notifications
+        statusUpdates:
+          type: boolean
+          description: Whether to notify about status changes
+        messages:
+          type: boolean
+          description: Whether to notify about new messages
+      required:
+        - email
+        - statusUpdates
+        - messages
+      example:
+        email: true
+        statusUpdates: true
+        messages: true
+    
+    Application:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique application identifier
+        lastLoginAt:
+          type: string
+          format: date-time
+          description: Timestamp of the applicant's last login
+        communicationEnabled:
+          type: boolean
+          description: Whether communication features are enabled for this application
+        feedbackMessage:
+          type: string
+          description: Optional feedback message from the recruitment team
+        reviewNotes:
+          type: string
+          description: Review notes visible to the applicant
+        estimatedDecisionDate:
+          type: string
+          format: date-time
+          description: Estimated date when a decision will be made
+        applicantNotifications:
+          $ref: '#/components/schemas/NotificationSettings'
+        status:
+          $ref: '#/components/schemas/ApplicationStatus'
+        name:
+          type: string
+          description: Applicant's full name
+        email:
+          type: string
+          format: email
+          description: Applicant's email address
+        phone:
+          type: string
+          description: Applicant's phone number
+        location:
+          type: string
+          description: Applicant's location
+        resumeUrl:
+          type: string
+          format: uri
+          description: URL to the applicant's resume
+        applicationDate:
+          type: string
+          format: date-time
+          description: When the application was submitted
+        lastStatusChangeDate:
+          type: string
+          format: date-time
+          description: When the application status was last updated
+      required:
+        - _id
+        - status
+        - name
+        - email
+        - applicationDate
+      example:
+        _id: "60a3d1e9b50c2b3a24c8e4f2"
+        status: "reviewing"
+        lastLoginAt: "2023-06-01T10:30:00Z"
+        communicationEnabled: true
+        feedbackMessage: "Thank you for your detailed application."
+        estimatedDecisionDate: "2023-07-01T00:00:00Z"
+        applicantNotifications:
+          email: true
+          statusUpdates: true
+          messages: true
+        name: "Jane Smith"
+        email: "jane.smith@example.com"
+        phone: "+1 (555) 123-4567"
+        location: "San Francisco, CA"
+        resumeUrl: "https://storage.prodg.studio/resumes/janesmith.pdf"
+        applicationDate: "2023-05-15T14:22:33Z"
+        lastStatusChangeDate: "2023-05-20T09:15:00Z"
+    
+    ApplicationUpdate:
+      type: object
+      properties:
+        feedbackMessage:
+          type: string
+          description: Feedback message from the applicant
+        applicantNotifications:
+          $ref: '#/components/schemas/NotificationSettings'
+      example:
+        feedbackMessage: "Thank you for reviewing my application."
+        applicantNotifications:
+          email: true
+          statusUpdates: true
+          messages: false
+    
+    MessageType:
+      type: string
+      enum:
+        - message
+        - status_update
+        - request
+        - notification
+      description: Type of communication message
+    
+    SenderType:
+      type: string
+      enum:
+        - applicant
+        - admin
+        - system
+      description: Who sent the message
+    
+    Communication:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: Unique message identifier
+        applicationId:
+          type: string
+          description: Associated application ID
+        senderId:
+          type: string
+          description: ID of the sender
+        senderType:
+          $ref: '#/components/schemas/SenderType'
+        message:
+          type: string
+          description: Message content
+          maxLength: 5000
+        attachments:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: List of attachment URLs
+        timestamp:
+          type: string
+          format: date-time
+          description: When the message was sent
+        isRead:
+          type: boolean
+          description: Whether the message has been read by the recipient
+        messageType:
+          $ref: '#/components/schemas/MessageType'
+      required:
+        - _id
+        - applicationId
+        - senderId
+        - senderType
+        - message
+        - timestamp
+        - isRead
+        - messageType
+      example:
+        _id: "60b2c5f9d8a2e45fa7c12345"
+        applicationId: "60a3d1e9b50c2b3a24c8e4f2"
+        senderId: "admin123"
+        senderType: "admin"
+        message: "Thank you for your application! We're currently reviewing it and will get back to you soon."
+        timestamp: "2023-06-01T09:00:00Z"
+        isRead: false
+        messageType: "message"
+    
+    CommunicationList:
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Communication'
+          description: List of communication messages
+        hasMore:
+          type: boolean
+          description: Whether there are more messages available
+        unreadCount:
+          type: integer
+          description: Number of unread messages
+      required:
+        - messages
+        - hasMore
+      example:
+        messages:
+          - _id: "60b2c5f9d8a2e45fa7c12345"
+            applicationId: "60a3d1e9b50c2b3a24c8e4f2"
+            senderId: "admin123"
+            senderType: "admin"
+            message: "Thank you for your application!"
+            timestamp: "2023-06-01T09:00:00Z"
+            isRead: true
+            messageType: "message"
+          - _id: "60b2c5f9d8a2e45fa7c12346"
+            applicationId: "60a3d1e9b50c2b3a24c8e4f2"
+            senderId: "system"
+            senderType: "system"
+            message: "Your application status has been updated to 'reviewing'."
+            timestamp: "2023-06-02T10:00:00Z"
+            isRead: false
+            messageType: "status_update"
+        hasMore: false
+        unreadCount: 1
+    
+    MagicLinkRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          description: Applicant's email address
+        applicationId:
+          type: string
+          description: Application ID (optional, can be determined from email)
+      required:
+        - email
+      example:
+        email: "jane.smith@example.com"
+        applicationId: "60a3d1e9b50c2b3a24c8e4f2"
+    
+    MagicLinkResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether the request was successful
+        message:
+          type: string
+          description: Message describing the result
+      required:
+        - success
+      example:
+        success: true
+        message: "Magic link sent successfully. Please check your email."
+
+    VerifyTokenResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether the token was valid
+        redirectUrl:
+          type: string
+          description: URL to redirect to after successful verification
+      required:
+        - success
+      example:
+        success: true
+        redirectUrl: "/applicant"
+
+    LogoutResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether the logout was successful
+      required:
+        - success
+      example:
+        success: true
+    
+    NewMessage:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Message content
+          maxLength: 5000
+      required:
+        - message
+      example:
+        message: "Hello, I have a question about my application. When can I expect to hear back about the next steps?"
+
+paths:
+  /applicant/auth/request-access:
+    post:
+      summary: Request magic link for authentication
+      description: |
+        Sends a magic link to the applicant's email for authentication.
+        
+        The magic link contains a secure token that expires after 15 minutes.
+        When the user clicks on the link, they'll be redirected to the verification endpoint.
+      tags:
+        - Authentication
+      operationId: requestAccess
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MagicLinkRequest'
+      responses:
+        '200':
+          description: Magic link sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MagicLinkResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          examples:
+            emailMissing:
+              value:
+                error: "Email is required"
+            invalidEmail:
+              value:
+                error: "Invalid email format"
+        '404':
+          description: Application not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          examples:
+            applicationNotFound:
+              value:
+                error: "No application found for this email address"
+        '429':
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          examples:
+            rateLimited:
+              value:
+                error: "Too many login attempts. Please try again in 15 minutes."
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /applicant/auth/verify:
+    get:
+      summary: Verify magic link token
+      description: |
+        Verifies the magic link token and creates a session.
+        
+        If the token is valid and not expired, a session cookie will be set
+        that's valid for 7 days. The user will be redirected to the applicant dashboard.
+      tags:
+        - Authentication
+      operationId: verifyToken
+      parameters:
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: Magic link token
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImphbmUuc21pdGhAZXhhbXBsZS5jb20iLCJhcHBsaWNhdGlvbklkIjoiNjBhM2QxZTliNTBjMmIzYTI0YzhlNGYyIiwiaWF0IjoxNjE2NDI1MjAwLCJleHAiOjE2MTY0MjYxMDB9.7JLZeYnpW7C7djLzLlB5uyFjBPDQZ5oaV3TQdSUEO3s"
+      responses:
+        '200':
+          description: Token verified and session created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VerifyTokenResponse'
+        '400':
+          description: Invalid token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          examples:
+            invalidToken:
+              value:
+                error: "Invalid token"
+            expiredToken:
+              value:
+                error: "Token has expired"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /applicant/auth/logout:
+    post:
+      summary: Logout applicant
+      description: |
+        Clears the applicant's session cookie.
+        
+        This endpoint invalidates the current session and removes the session cookie.
+      tags:
+        - Authentication
+      operationId: logout
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Session cleared successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LogoutResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          examples:
+            unauthorized:
+              value:
+                error: "Unauthorized"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /applicant/application:
+    get:
+      summary: Get application data
+      description: |
+        Retrieves the applicant's application data.
+        
+        This endpoint returns the complete application data for the currently authenticated applicant,
+        including status information, personal details, and notification settings.
+      tags:
+        - Application
+      operationId: getApplication
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Application data retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          examples:
+            unauthorized:
+              value:
+                error: "Unauthorized"
+        '404':
+          description: Application not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          examples:
+            notFound:
+              value:
+                error: "Application not found"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    
+    patch:
+      summary: Update application
+      description: |
+        Updates the applicant's application data.
+        
+        This endpoint allows applicants to update certain fields of their application.
+        Note that updates are only allowed when the application status is 'pending'.
+        
+        Fields that can be updated:
+        - Feedback message
+        - Notification settings
+      tags:
+        - Application
+      operationId: updateApplication
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplicationUpdate'
+      responses:
+        '200':
+          description: Application updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Application'
+        '400':
+          description: Invalid request or application not in pending status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          examples:
+            invalidStatus:
+              value:
+                error: "Application cannot be updated in its current status"
+            validationError:
+              value:
+                error: "Invalid notification settings"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          examples:
+            unauthorized:
+              value:
+                error: "Unauthorized"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  
+  /applicant/communications:
+    get:
+      summary: Get messages
+      description: |
+        Retrieves the applicant's messages.
+        
+        This endpoint returns a list of communication messages between the applicant and the recruitment team.
+        Messages are sorted by timestamp in descending order (newest first).
+        
+        Pagination is supported through the 'limit' and 'before' parameters.
+      tags:
+        - Communication
+      operationId: getMessages
+      security:
+        - cookieAuth: []
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 50
+            minimum: 1
+            maximum: 100
+          description: Maximum number of messages to retrieve
+        - in: query
+          name: before
+          schema:
+            type: string
+            format: date-time
+          description: Get messages before this timestamp
+          example: "2023-06-01T12:00:00Z"
+      responses:
+        '200':
+          description: Messages retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommunicationList'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          examples:
+            unauthorized:
+              value:
+                error: "Unauthorized"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    
+    post:
+      summary: Send message
+      description: |
+        Sends a message from the applicant to the recruitment team.
+        
+        This endpoint allows applicants to send a text message to communicate with the recruitment team.
+        Messages are limited to 5000 characters.
+        
+        When a message is sent successfully, it's added to the communication history and the recruitment team
+        is notified based on their notification settings.
+      tags:
+        - Communication
+      operationId: sendMessage
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewMessage'
+      responses:
+        '201':
+          description: Message sent successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Communication'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          examples:
+            emptyMessage:
+              value:
+                error: "Message cannot be empty"
+            messageTooLong:
+              value:
+                error: "Message exceeds maximum length of 5000 characters"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          examples:
+            unauthorized:
+              value:
+                error: "Unauthorized"
+        '403':
+          description: Communication disabled
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          examples:
+            communicationDisabled:
+              value:
+                error: "Communication is currently disabled for this application"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error' 

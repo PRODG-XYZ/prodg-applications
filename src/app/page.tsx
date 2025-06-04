@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { EtheralShadow } from '@/components/ui/etheral-shadow';
 import { applicationSchema, type ApplicationFormData } from '@/lib/validation';
 import { Github, Linkedin, Mail, User, Code, Briefcase, Clock, X, FileText, Phone, Globe } from 'lucide-react';
 import FileUpload from '@/components/FileUpload';
@@ -116,11 +117,20 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 relative overflow-hidden">
-      {/* Background effects */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(100,100,100,0.1),transparent_50%)]" />
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-gray-500/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-gray-400/10 rounded-full blur-3xl" />
+    <div className="min-h-screen relative overflow-hidden">
+      {/* EtheralShadow Background */}
+      <div className="absolute inset-0 z-0">
+        <EtheralShadow
+          color="rgba(128, 128, 128, 1)"
+          animation={{ scale: 100, speed: 100 }}
+          noise={{ opacity: 1, scale: 1.2 }}
+          sizing="fill"
+          className="w-full h-full"
+        />
+      </div>
+
+      {/* Overlay for better text readability */}
+      <div className="absolute inset-0 bg-black/10 z-1" />
 
       {/* Welcome Modal */}
       <AnimatePresence>
@@ -145,8 +155,8 @@ export default function HomePage() {
               </button>
               
               <div className="text-center mb-6">
-                <h2 className="text-2xl font-bold text-white mb-4">Welcome to ProDG Studios</h2>
-                <p className="text-gray-300 leading-relaxed">
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-300 to-purple-300 bg-clip-text text-transparent mb-4">Welcome to ProDG Studios</h2>
+                <p className="text-cyan-100 leading-relaxed">
                   Collaborate on innovative projects, grow your skills, and be part of a community that&apos;s shaping tomorrow&apos;s technology.
                 </p>
               </div>
@@ -175,7 +185,7 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-4xl md:text-6xl font-bold text-white mb-6"
+              className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-cyan-300 via-white to-purple-300 bg-clip-text text-transparent mb-6"
             >
               Join ProDG
             </motion.h1>
@@ -183,7 +193,7 @@ export default function HomePage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-lg md:text-xl text-gray-400 max-w-xl mx-auto"
+              className="text-lg md:text-xl text-cyan-200 max-w-xl mx-auto"
             >
               Code. Collaborate. Grow.
             </motion.p>
@@ -194,30 +204,30 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="bg-slate-800/30 backdrop-blur-lg rounded-2xl border border-slate-700/50 p-8 shadow-2xl"
+            className="bg-slate-800/40 backdrop-blur-lg rounded-2xl border border-cyan-500/20 p-8 shadow-2xl shadow-cyan-500/10"
           >
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
               {/* Personal Information */}
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="flex items-center gap-2">
-                    <User className="w-4 h-4 text-gray-400" />
+                  <Label htmlFor="name" className="flex items-center gap-2 text-cyan-200">
+                    <User className="w-4 h-4 text-cyan-400" />
                     Full Name *
                   </Label>
                   <Input
                     id="name"
                     {...register('name')}
                     placeholder="Your full name"
-                    className={errors.name ? 'border-gray-600' : ''}
+                    className={`bg-slate-800/50 border-cyan-500/30 focus:border-cyan-400 focus:ring-cyan-400/20 placeholder:text-slate-400 ${errors.name ? 'border-red-500/50' : ''}`}
                   />
                   {errors.name && (
-                    <p className="text-gray-500 text-sm">{errors.name.message}</p>
+                    <p className="text-red-400 text-sm">{errors.name.message}</p>
                   )}
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="flex items-center gap-2">
-                    <Mail className="w-4 h-4 text-gray-400" />
+                  <Label htmlFor="email" className="flex items-center gap-2 text-cyan-200">
+                    <Mail className="w-4 h-4 text-cyan-400" />
                     Email Address *
                   </Label>
                   <Input
@@ -225,10 +235,10 @@ export default function HomePage() {
                     type="email"
                     {...register('email')}
                     placeholder="your.email@example.com"
-                    className={errors.email ? 'border-gray-600' : ''}
+                    className={`bg-slate-800/50 border-cyan-500/30 focus:border-cyan-400 focus:ring-cyan-400/20 placeholder:text-slate-400 ${errors.email ? 'border-red-500/50' : ''}`}
                   />
                   {errors.email && (
-                    <p className="text-gray-500 text-sm">{errors.email.message}</p>
+                    <p className="text-red-400 text-sm">{errors.email.message}</p>
                   )}
                 </div>
               </div>
@@ -236,29 +246,29 @@ export default function HomePage() {
               {/* Contact Information */}
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="phone" className="flex items-center gap-2">
-                    <Phone className="w-4 h-4 text-gray-400" />
+                  <Label htmlFor="phone" className="flex items-center gap-2 text-cyan-200">
+                    <Phone className="w-4 h-4 text-cyan-400" />
                     Phone Number *
                   </Label>
                   <Input
                     id="phone"
                     {...register('phone')}
                     placeholder="+254 712 345 678"
-                    className={errors.phone ? 'border-gray-600' : ''}
+                    className={`bg-slate-800/50 border-cyan-500/30 focus:border-cyan-400 focus:ring-cyan-400/20 placeholder:text-slate-400 ${errors.phone ? 'border-red-500/50' : ''}`}
                   />
                   {errors.phone && (
-                    <p className="text-gray-500 text-sm">{errors.phone.message}</p>
+                    <p className="text-red-400 text-sm">{errors.phone.message}</p>
                   )}
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="country" className="flex items-center gap-2">
-                    <Globe className="w-4 h-4 text-gray-400" />
+                  <Label htmlFor="country" className="flex items-center gap-2 text-cyan-200">
+                    <Globe className="w-4 h-4 text-cyan-400" />
                     Country *
                   </Label>
                   <select
                     {...register('country')}
-                    className={`flex h-10 w-full rounded-md border ${errors.country ? 'border-gray-600' : 'border-slate-700'} bg-slate-800/50 px-3 py-2 text-sm text-slate-50 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50`}
+                    className={`flex h-10 w-full rounded-md border bg-slate-800/50 px-3 py-2 text-sm text-slate-50 ring-offset-background focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 ${errors.country ? 'border-red-500/50 focus-visible:ring-red-400/20' : 'border-cyan-500/30 focus-visible:ring-cyan-400/20 focus-visible:border-cyan-400'}`}
                   >
                     <option value="" className="bg-slate-800 text-slate-400">Select your country</option>
                     {countries.map((country) => (
@@ -268,7 +278,7 @@ export default function HomePage() {
                     ))}
                   </select>
                   {errors.country && (
-                    <p className="text-gray-500 text-sm">{errors.country.message}</p>
+                    <p className="text-red-400 text-sm">{errors.country.message}</p>
                   )}
                 </div>
               </div>
@@ -276,76 +286,76 @@ export default function HomePage() {
               {/* Social Links */}
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="github" className="flex items-center gap-2">
-                    <Github className="w-4 h-4 text-gray-400" />
+                  <Label htmlFor="github" className="flex items-center gap-2 text-cyan-200">
+                    <Github className="w-4 h-4 text-cyan-400" />
                     GitHub Profile *
                   </Label>
                   <Input
                     id="github"
                     {...register('github')}
                     placeholder="https://github.com/username"
-                    className={errors.github ? 'border-gray-600' : ''}
+                    className={`bg-slate-800/50 border-cyan-500/30 focus:border-cyan-400 focus:ring-cyan-400/20 placeholder:text-slate-400 ${errors.github ? 'border-red-500/50' : ''}`}
                   />
                   {errors.github && (
-                    <p className="text-gray-500 text-sm">{errors.github.message}</p>
+                    <p className="text-red-400 text-sm">{errors.github.message}</p>
                   )}
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="linkedin" className="flex items-center gap-2">
-                    <Linkedin className="w-4 h-4 text-gray-400" />
+                  <Label htmlFor="linkedin" className="flex items-center gap-2 text-cyan-200">
+                    <Linkedin className="w-4 h-4 text-cyan-400" />
                     LinkedIn Profile *
                   </Label>
                   <Input
                     id="linkedin"
                     {...register('linkedin')}
                     placeholder="https://linkedin.com/in/username"
-                    className={errors.linkedin ? 'border-gray-600' : ''}
+                    className={`bg-slate-800/50 border-cyan-500/30 focus:border-cyan-400 focus:ring-cyan-400/20 placeholder:text-slate-400 ${errors.linkedin ? 'border-red-500/50' : ''}`}
                   />
                   {errors.linkedin && (
-                    <p className="text-gray-500 text-sm">{errors.linkedin.message}</p>
+                    <p className="text-red-400 text-sm">{errors.linkedin.message}</p>
                   )}
                 </div>
               </div>
 
               {/* Background Description */}
               <div className="space-y-2">
-                <Label htmlFor="backgroundDescription" className="flex items-center gap-2">
-                  <User className="w-4 h-4 text-gray-400" />
+                <Label htmlFor="backgroundDescription" className="flex items-center gap-2 text-cyan-200">
+                  <User className="w-4 h-4 text-cyan-400" />
                   Professional Background *
                 </Label>
                 <Textarea
                   id="backgroundDescription"
                   {...register('backgroundDescription')}
                   placeholder="Tell us about your professional journey, education, and what drives you as a developer..."
-                  className={`min-h-[120px] ${errors.backgroundDescription ? 'border-gray-600' : ''}`}
+                  className={`min-h-[120px] bg-slate-800/50 border-cyan-500/30 focus:border-cyan-400 focus:ring-cyan-400/20 placeholder:text-slate-400 ${errors.backgroundDescription ? 'border-red-500/50' : ''}`}
                 />
                 {errors.backgroundDescription && (
-                  <p className="text-gray-500 text-sm">{errors.backgroundDescription.message}</p>
+                  <p className="text-red-400 text-sm">{errors.backgroundDescription.message}</p>
                 )}
               </div>
 
               {/* Experience */}
               <div className="space-y-2">
-                <Label htmlFor="experience" className="flex items-center gap-2">
-                  <Briefcase className="w-4 h-4 text-gray-400" />
+                <Label htmlFor="experience" className="flex items-center gap-2 text-cyan-200">
+                  <Briefcase className="w-4 h-4 text-cyan-400" />
                   Development Experience *
                 </Label>
                 <Textarea
                   id="experience"
                   {...register('experience')}
                   placeholder="Describe your development experience, notable projects, and technical achievements..."
-                  className={`min-h-[100px] ${errors.experience ? 'border-gray-600' : ''}`}
+                  className={`min-h-[100px] bg-slate-800/50 border-cyan-500/30 focus:border-cyan-400 focus:ring-cyan-400/20 placeholder:text-slate-400 ${errors.experience ? 'border-red-500/50' : ''}`}
                 />
                 {errors.experience && (
-                  <p className="text-gray-500 text-sm">{errors.experience.message}</p>
+                  <p className="text-red-400 text-sm">{errors.experience.message}</p>
                 )}
               </div>
 
               {/* Skills */}
               <div className="space-y-4">
-                <Label className="flex items-center gap-2">
-                  <Code className="w-4 h-4 text-gray-400" />
+                <Label className="flex items-center gap-2 text-cyan-200">
+                  <Code className="w-4 h-4 text-cyan-400" />
                   Technical Skills * (Select all that apply)
                 </Label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -358,8 +368,8 @@ export default function HomePage() {
                       whileTap={{ scale: 0.95 }}
                       className={`p-3 rounded-lg border text-sm font-medium transition-all duration-300 ${
                         selectedSkills.includes(skill)
-                          ? 'bg-gray-700/40 border-gray-400 text-gray-200 shadow-lg shadow-gray-700/20'
-                          : 'bg-slate-700/30 border-slate-600 text-slate-300 hover:border-slate-500'
+                          ? 'bg-cyan-500/20 border-cyan-400/60 text-cyan-100 shadow-lg shadow-cyan-500/20'
+                          : 'bg-slate-700/30 border-cyan-500/20 text-slate-300 hover:border-cyan-400/40 hover:bg-cyan-500/10'
                       }`}
                     >
                       {skill}
@@ -367,28 +377,28 @@ export default function HomePage() {
                   ))}
                 </div>
                 {errors.skills && (
-                  <p className="text-gray-500 text-sm">{errors.skills.message}</p>
+                  <p className="text-red-400 text-sm">{errors.skills.message}</p>
                 )}
               </div>
 
               {/* Optional Fields */}
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <Label htmlFor="portfolioUrl">Portfolio URL</Label>
+                  <Label htmlFor="portfolioUrl" className="text-cyan-200">Portfolio URL</Label>
                   <Input
                     id="portfolioUrl"
                     {...register('portfolioUrl')}
                     placeholder="https://yourportfolio.com"
-                    className={errors.portfolioUrl ? 'border-gray-600' : ''}
+                    className={`bg-slate-800/50 border-cyan-500/30 focus:border-cyan-400 focus:ring-cyan-400/20 placeholder:text-slate-400 ${errors.portfolioUrl ? 'border-red-500/50' : ''}`}
                   />
                   {errors.portfolioUrl && (
-                    <p className="text-gray-500 text-sm">{errors.portfolioUrl.message}</p>
+                    <p className="text-red-400 text-sm">{errors.portfolioUrl.message}</p>
                   )}
                 </div>
 
                 <div className="space-y-2">
-                  <Label className="flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-gray-400" />
+                  <Label className="flex items-center gap-2 text-cyan-200">
+                    <FileText className="w-4 h-4 text-cyan-400" />
                     Resume Upload
                   </Label>
                   <FileUpload
@@ -397,40 +407,40 @@ export default function HomePage() {
                     currentFileName={uploadedResumeFileName}
                   />
                   {errors.resumeUrl && (
-                    <p className="text-gray-500 text-sm">{errors.resumeUrl.message}</p>
+                    <p className="text-red-400 text-sm">{errors.resumeUrl.message}</p>
                   )}
                 </div>
               </div>
 
               {/* Motivation */}
               <div className="space-y-2">
-                <Label htmlFor="motivation">Why do you want to join us? *</Label>
+                <Label htmlFor="motivation" className="text-cyan-200">Why do you want to join us? *</Label>
                 <Textarea
                   id="motivation"
                   {...register('motivation')}
                   placeholder="What excites you about working with us? How do you see yourself contributing to our mission?"
-                  className={`min-h-[100px] ${errors.motivation ? 'border-gray-600' : ''}`}
+                  className={`min-h-[100px] bg-slate-800/50 border-cyan-500/30 focus:border-cyan-400 focus:ring-cyan-400/20 placeholder:text-slate-400 ${errors.motivation ? 'border-red-500/50' : ''}`}
                 />
                 {errors.motivation && (
-                  <p className="text-gray-500 text-sm">{errors.motivation.message}</p>
+                  <p className="text-red-400 text-sm">{errors.motivation.message}</p>
                 )}
               </div>
 
               {/* Availability */}
               <div className="grid md:grid-cols-1 gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="availability" className="flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-gray-400" />
+                  <Label htmlFor="availability" className="flex items-center gap-2 text-cyan-200">
+                    <Clock className="w-4 h-4 text-cyan-400" />
                     Weekly Availability *
                   </Label>
                   <Input
                     id="availability"
                     {...register('availability')}
                     placeholder="e.g., 20 hours per week, flexible schedule"
-                    className={errors.availability ? 'border-gray-600' : ''}
+                    className={`bg-slate-800/50 border-cyan-500/30 focus:border-cyan-400 focus:ring-cyan-400/20 placeholder:text-slate-400 ${errors.availability ? 'border-red-500/50' : ''}`}
                   />
                   {errors.availability && (
-                    <p className="text-gray-500 text-sm">{errors.availability.message}</p>
+                    <p className="text-red-400 text-sm">{errors.availability.message}</p>
                   )}
                 </div>
               </div>
@@ -454,8 +464,8 @@ export default function HomePage() {
                   animate={{ opacity: 1, y: 0 }}
                   className={`p-4 rounded-lg border ${
                     submitMessage.includes('successfully')
-                      ? 'bg-gray-600/10 border-gray-400/20 text-gray-300'
-                      : 'bg-gray-800/10 border-gray-600/20 text-gray-400'
+                      ? 'bg-cyan-500/10 border-cyan-400/20 text-cyan-100'
+                      : 'bg-red-500/10 border-red-400/20 text-red-200'
                   }`}
                 >
                   {submitMessage}

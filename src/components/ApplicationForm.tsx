@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { BorderBeam } from '@/components/ui/border-beam';
 import { applicationSchema, type ApplicationFormData } from '@/lib/validation';
 import { Github, Linkedin, Mail, User, Code, Briefcase, Clock, FileText, CheckCircle, Phone, Globe } from 'lucide-react';
 import FileUpload from '@/components/FileUpload';
@@ -183,8 +184,9 @@ export default function ApplicationForm() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="bg-slate-800/30 backdrop-blur-lg rounded-2xl border border-slate-700/50 p-8 shadow-2xl"
+            className="relative bg-slate-800/30 backdrop-blur-lg rounded-2xl border border-slate-700/50 p-8 shadow-2xl"
           >
+            <BorderBeam size={250} duration={12} delay={9} />
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
               {/* Personal Information */}
               <div className="grid md:grid-cols-2 gap-6">
