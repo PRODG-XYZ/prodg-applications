@@ -77,8 +77,8 @@ export default function ApplicationForm() {
     setResumeFileName('');
   };
 
-  const handleVisitProdg = () => {
-    window.location.href = 'https://prodg.studio';
+  const handleVisitPeopleos = () => {
+    window.location.href = 'https://peopleos.com';
   };
 
   const onSubmit = async (data: ApplicationFormData) => {
@@ -141,11 +141,11 @@ export default function ApplicationForm() {
             </p>
             
             <Button
-              onClick={handleVisitProdg}
+              onClick={handleVisitPeopleos}
               className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600"
               size="lg"
             >
-              Visit PRODG
+              Visit PeopleOS
             </Button>
           </motion.div>
         </div>

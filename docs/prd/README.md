@@ -1,6 +1,6 @@
 # Product Requirements Documentation
 
-This directory contains the Product Requirements Documents (PRDs) for the ProDG Applications platform.
+This directory contains the Product Requirements Documents (PRDs) for the PeopleOS platform.
 
 ## Contents
 
@@ -11,7 +11,7 @@ This directory contains the Product Requirements Documents (PRDs) for the ProDG 
 
 ## Purpose
 
-These PRDs define the product requirements for different features of the ProDG Applications platform. Each document outlines:
+These PRDs define the product requirements for different features of the PeopleOS platform. Each document outlines:
 
 - Business objectives
 - User personas and needs

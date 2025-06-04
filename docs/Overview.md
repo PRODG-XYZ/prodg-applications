@@ -1,10 +1,115 @@
-# ProdG Applications - Project Overview & Documentation Directory
+# PeopleOS - Project Overview & Documentation Directory
 
-> **Modern Developer Application Platform** - A cutting-edge recruitment platform built with Next.js, MongoDB, and futuristic UI design.
+_(This document serves as a high-level introduction to the platform architecture and documentation structure)_
+
+## Introduction
+
+PeopleOS is a comprehensive developer recruitment platform designed to streamline the application and review process for technical talent acquisition. The platform features a modern, futuristic UI and robust backend services to support the complete recruitment lifecycle.
+
+## Core Platform Components
+
+1. **Applicant Experience**
+   - Application submission
+   - Status tracking
+   - Communication with recruitment team
+   - Document uploads
+
+2. **Personnel Management**
+   - Team member profiles
+   - Role and department assignment 
+   - Activity tracking
+   - Performance metrics
+
+3. **Admin Dashboard**
+   - Application review
+   - Candidate evaluation
+   - Status management
+   - Analytics and reporting
+
+## Technical Architecture
+
+### Frontend
+- Next.js 15 with React 19
+- TypeScript for type safety
+- Tailwind CSS for styling
+- Framer Motion for animations
+- Responsive design for all devices
+
+### Backend
+- Next.js API routes
+- MongoDB with Mongoose ODM
+- S3 integration for file storage
+- JWT-based authentication
+- Server-side validation
+
+### Deployment
+- Vercel hosting
+- GitHub CI/CD pipeline
+- MongoDB Atlas for database
+- AWS S3 for storage
+
+## Documentation Structure
+
+The documentation is organized by functional area and purpose:
+
+```
+docs/
+├── api/                   # API documentation
+│   ├── API_DOCUMENTATION.md  # API overview and usage
+│   └── swagger.yaml       # OpenAPI specification
+├── features/              # Feature implementation details
+│   ├── APPLICANT_DASHBOARD_README.md
+│   └── PERSONNEL_DASHBOARD_README.md
+├── migrations/            # Migration summaries
+│   ├── MIGRATION_COMPLETE_SUMMARY.md
+│   ├── PHASE_1_SUMMARY.md
+│   ├── PERSONNEL_DASHBOARD_INTEGRATION_SUMMARY.md
+│   └── REAL_DATA_MIGRATION_SUMMARY.md
+├── prd/                   # Product requirements
+│   ├── ANALYTICS_PRD.md
+│   ├── APPLICANT_DASHBOARD_PRD.md
+│   ├── PERSONNEL_DASHBOARD_PRD.md
+│   └── PERSONNEL_MANAGEMENT_PRD.md
+├── setup/                 # Setup guides
+│   └── S3_SETUP.md
+└── Overview.md            # This file
+```
+
+## Getting Started
+
+Developers new to the project should:
+
+1. Read the main [README.md](../README.md) at the repository root
+2. Review the PRDs to understand product requirements
+3. Examine feature implementation details
+4. Set up the development environment using setup guides
+
+## Development Workflow
+
+```
+git clone <repository-url>
+cd peopleos
+npm install
+npm run dev
+```
+
+For detailed setup instructions, see the main [README.md](../README.md).
+
+## Key Technical Decisions
+
+1. **Next.js App Router**: Provides server components, data fetching, and routing
+2. **MongoDB**: Flexible schema for evolving data requirements
+3. **Tailwind CSS**: Consistent styling with minimal CSS overhead
+4. **TypeScript**: Type safety and improved developer experience
+5. **Modular Components**: Reusable UI building blocks
+
+## Roadmap
+
+See the project's GitHub issues for current development priorities and roadmap.
 
 ## 🎯 Project Mission
 
-ProdG Applications is a comprehensive developer recruitment platform designed to streamline the application and review process for technical talent acquisition. The platform features a modern, futuristic interface that provides an exceptional experience for both applicants and reviewers.
+PeopleOS is a comprehensive developer recruitment platform designed to streamline the application and review process for technical talent acquisition. The platform features a modern, futuristic interface that provides an exceptional experience for both applicants and reviewers.
 
 ## 🏗️ Architecture Overview
 

@@ -1,6 +1,6 @@
 # Feature Documentation
 
-This directory contains implementation details for the major features of the ProDG Applications platform.
+This directory contains implementation details for the major features of the PeopleOS platform.
 
 ## Contents
 

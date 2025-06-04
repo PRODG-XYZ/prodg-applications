@@ -14,12 +14,12 @@ info:
     - Personalized insights and updates
   version: 1.0.0
   contact:
-    name: ProDG Support Team
-    email: support@prodg.studio
-    url: https://prodg.studio/support
+    name: PeopleOS Support Team
+    email: support@peopleos.com
+    url: https://peopleos.com/support
   license:
     name: Proprietary
-    url: https://prodg.studio/terms
+    url: https://peopleos.com/terms
   
 servers:
   - url: /api
@@ -158,7 +158,7 @@ components:
         email: "jane.smith@example.com"
         phone: "+1 (555) 123-4567"
         location: "San Francisco, CA"
-        resumeUrl: "https://storage.prodg.studio/resumes/janesmith.pdf"
+        resumeUrl: "https://storage.peopleos.com/resumes/janesmith.pdf"
         applicationDate: "2023-05-15T14:22:33Z"
         lastStatusChangeDate: "2023-05-20T09:15:00Z"
     

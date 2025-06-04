@@ -23,7 +23,7 @@ export default function ApplicantLayout({ children }: ApplicantLayoutProps) {
             {/* Logo/Brand */}
             <div className="flex items-center">
               <Link href="/applicant/dashboard" className="text-xl font-bold text-white">
-                ProdG Applications
+                PeopleOS
               </Link>
             </div>
 

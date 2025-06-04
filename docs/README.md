@@ -1,6 +1,6 @@
-# ProDG Applications Documentation
+# PeopleOS Documentation
 
-This directory contains comprehensive documentation for the ProDG Applications platform. The documentation is organized into several sections:
+This directory contains comprehensive documentation for the PeopleOS platform. The documentation is organized into several sections:
 
 ## Directory Structure
 

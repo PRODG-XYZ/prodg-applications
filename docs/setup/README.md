@@ -1,6 +1,6 @@
 # Setup Documentation
 
-This directory contains setup and configuration guides for the ProDG Applications platform.
+This directory contains setup and configuration guides for the PeopleOS platform.
 
 ## Contents
 

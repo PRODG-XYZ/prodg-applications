@@ -1,6 +1,6 @@
 # API Documentation
 
-This directory contains documentation for the ProDG Applications API.
+This directory contains documentation for the PeopleOS API.
 
 ## Contents
 

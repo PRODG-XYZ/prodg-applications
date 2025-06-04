@@ -1,6 +1,6 @@
 # Migration and Integration Documentation
 
-This directory contains documentation about data migrations and integration processes for the ProDG Applications platform.
+This directory contains documentation about data migrations and integration processes for the PeopleOS platform.
 
 ## Contents
 

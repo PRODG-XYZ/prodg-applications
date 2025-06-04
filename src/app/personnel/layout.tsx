@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Personnel Dashboard - ProDG Applications',
+  title: 'Personnel Dashboard - PeopleOS',
   description: 'Personnel management and dashboard for team members',
 };
 

@@ -1,4 +1,4 @@
-# DevCorp Applications - Futuristic Developer Application Platform
+# PeopleOS - Futuristic Developer Application Platform
 
 A cutting-edge developer applications platform built with Next.js, MongoDB, and modern UI components. Features a beautiful, futuristic interface for developers to submit applications and for admins to review them.
 
@@ -56,7 +56,7 @@ For a high-level overview of the entire platform, see [Overview](./docs/Overview
 1. **Clone and install dependencies**:
 ```bash
 git clone <your-repo-url>
-cd prodg-applications
+cd peopleos
 npm install
 ```
 
@@ -64,10 +64,10 @@ npm install
 Create a `.env.local` file in the root directory:
 ```env
 # MongoDB Connection URL
-MONGODB_URI=mongodb://localhost:27017/devapp-applications
+MONGODB_URI=mongodb://localhost:27017/peopleos-applications
 
 # For MongoDB Atlas (cloud):
-# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/devapp-applications?retryWrites=true&w=majority
+# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/peopleos-applications?retryWrites=true&w=majority
 ```
 
 3. **Start the development server**:

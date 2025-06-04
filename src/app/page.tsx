@@ -155,7 +155,7 @@ export default function HomePage() {
               </button>
               
               <div className="text-center mb-6">
-                <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-300 to-purple-300 bg-clip-text text-transparent mb-4">Welcome to ProDG Studios</h2>
+                <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent mb-4">Welcome to PeopleOS</h2>
                 <p className="text-cyan-100 leading-relaxed">
                   Collaborate on innovative projects, grow your skills, and be part of a community that&apos;s shaping tomorrow&apos;s technology.
                 </p>
@@ -187,7 +187,7 @@ export default function HomePage() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-cyan-300 via-white to-purple-300 bg-clip-text text-transparent mb-6"
             >
-              Join ProDG
+              Join PeopleOS
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 20 }}
