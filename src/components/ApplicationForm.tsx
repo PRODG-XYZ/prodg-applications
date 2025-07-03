@@ -301,7 +301,7 @@ export default function ApplicationForm() {
               <div className="space-y-2">
                 <Label htmlFor="backgroundDescription" className="flex items-center gap-2">
                   <User className="w-4 h-4 text-cyan-400" />
-                  Professional Background * (max 10 characters)
+                  Professional Background * (min 50, max 2000 characters)
                 </Label>
                 <Textarea
                   id="backgroundDescription"
@@ -318,7 +318,7 @@ export default function ApplicationForm() {
               <div className="space-y-2">
                 <Label htmlFor="experience" className="flex items-center gap-2">
                   <Briefcase className="w-4 h-4 text-cyan-400" />
-                  Development Experience * (max 10 characters)
+                  Development Experience * (min 50, max 2000 characters)
                 </Label>
                 <Textarea
                   id="experience"
@@ -394,7 +394,7 @@ export default function ApplicationForm() {
 
               {/* Motivation */}
               <div className="space-y-2">
-                <Label htmlFor="motivation">Why do you want to join us? * (max 10 characters)</Label>
+                <Label htmlFor="motivation">Why do you want to join us? * (min 50, max 1000 characters)</Label>
                 <Textarea
                   id="motivation"
                   {...register('motivation')}
