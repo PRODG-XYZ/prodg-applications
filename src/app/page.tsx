@@ -202,7 +202,7 @@ export default function HomePage() {
                 <div className="space-y-2">
                   <Label htmlFor="name" className="flex items-center gap-2">
                     <User className="w-4 h-4 text-gray-400" />
-                    Full Name *
+                    Full Name
                   </Label>
                   <Input
                     id="name"
@@ -218,7 +218,7 @@ export default function HomePage() {
                 <div className="space-y-2">
                   <Label htmlFor="email" className="flex items-center gap-2">
                     <Mail className="w-4 h-4 text-gray-400" />
-                    Email Address *
+                    Email Address
                   </Label>
                   <Input
                     id="email"
@@ -238,7 +238,7 @@ export default function HomePage() {
                 <div className="space-y-2">
                   <Label htmlFor="phone" className="flex items-center gap-2">
                     <Phone className="w-4 h-4 text-gray-400" />
-                    Phone Number *
+                    Phone Number
                   </Label>
                   <Input
                     id="phone"
@@ -254,7 +254,7 @@ export default function HomePage() {
                 <div className="space-y-2">
                   <Label htmlFor="country" className="flex items-center gap-2">
                     <Globe className="w-4 h-4 text-gray-400" />
-                    Country *
+                    Country
                   </Label>
                   <select
                     {...register('country')}
@@ -278,7 +278,7 @@ export default function HomePage() {
                 <div className="space-y-2">
                   <Label htmlFor="github" className="flex items-center gap-2">
                     <Github className="w-4 h-4 text-gray-400" />
-                    GitHub Profile *
+                    GitHub Profile
                   </Label>
                   <Input
                     id="github"
@@ -294,7 +294,7 @@ export default function HomePage() {
                 <div className="space-y-2">
                   <Label htmlFor="linkedin" className="flex items-center gap-2">
                     <Linkedin className="w-4 h-4 text-gray-400" />
-                    LinkedIn Profile *
+                    LinkedIn Profile
                   </Label>
                   <Input
                     id="linkedin"
@@ -312,7 +312,7 @@ export default function HomePage() {
               <div className="space-y-2">
                 <Label htmlFor="backgroundDescription" className="flex items-center gap-2">
                   <User className="w-4 h-4 text-gray-400" />
-                  Professional Background *
+                  Professional Background
                 </Label>
                 <Textarea
                   id="backgroundDescription"
@@ -329,7 +329,7 @@ export default function HomePage() {
               <div className="space-y-2">
                 <Label htmlFor="experience" className="flex items-center gap-2">
                   <Briefcase className="w-4 h-4 text-gray-400" />
-                  Development Experience *
+                  Development Experience
                 </Label>
                 <Textarea
                   id="experience"
@@ -346,7 +346,7 @@ export default function HomePage() {
               <div className="space-y-4">
                 <Label className="flex items-center gap-2">
                   <Code className="w-4 h-4 text-gray-400" />
-                  Technical Skills * (Select all that apply)
+                  Technical Skills (Select all that apply)
                 </Label>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                   {popularSkills.map((skill) => (
@@ -404,7 +404,7 @@ export default function HomePage() {
 
               {/* Motivation */}
               <div className="space-y-2">
-                <Label htmlFor="motivation">Why do you want to join us? *</Label>
+                <Label htmlFor="motivation">Why do you want to join us?</Label>
                 <Textarea
                   id="motivation"
                   {...register('motivation')}
@@ -421,7 +421,7 @@ export default function HomePage() {
                 <div className="space-y-2">
                   <Label htmlFor="availability" className="flex items-center gap-2">
                     <Clock className="w-4 h-4 text-gray-400" />
-                    Weekly Availability *
+                    Weekly Availability
                   </Label>
                   <Input
                     id="availability"
