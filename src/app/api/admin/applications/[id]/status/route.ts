@@ -15,7 +15,7 @@ export async function PATCH(
     await connectToDatabase();
 
     const { status, reviewNotes, estimatedDecisionDate } = await request.json();
-    const applicationId = params.id;
+    const { id: applicationId } = await params;
 
     // Validate status
     const validStatuses = ['pending', 'reviewing', 'approved', 'rejected'];

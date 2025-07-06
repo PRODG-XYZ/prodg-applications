@@ -5,28 +5,34 @@ export interface IProject extends Document {
   name: string;
   description: string;
   status: 'planning' | 'active' | 'on_hold' | 'completed' | 'cancelled';
-  priority: 'low' | 'medium' | 'high' | 'critical';
+  priority: 'low' | 'medium' | 'high' | 'urgent';
+  departmentId: string;
+  teamLeadId?: string;
+  members: string[]; // Personnel IDs
   startDate: Date;
   endDate?: Date;
-  estimatedHours: number;
-  actualHours: number;
   budget?: number;
-  team: {
-    lead: string; // Personnel ID
-    members: string[]; // Array of Personnel IDs
-    stakeholders: string[];
-  };
-  tasks: string[]; // Array of Task IDs
-  documents: string[]; // S3 URLs
+  progress: number; // 0-100
   tags: string[];
-  client?: string;
-  repository?: string;
+  
+  // Linear Integration
+  linearProjectId?: string;
+  linearTeamId?: string;
+  linearCycleIds: string[];
+  syncEnabled: boolean;
+  lastSyncedAt?: Date;
+  syncStatus: 'synced' | 'pending_sync' | 'sync_failed' | 'not_synced';
+  lastSyncError?: string;
+  
+  // Metadata
   createdAt: Date;
   updatedAt: Date;
+  createdBy: string;
+  lastModifiedBy: string;
 }
 
 const ProjectSchema = new Schema<IProject>({
-  name: { type: String, required: true },
+  name: { type: String, required: true, trim: true },
   description: { type: String, required: true },
   status: { 
     type: String, 
@@ -35,31 +41,61 @@ const ProjectSchema = new Schema<IProject>({
   },
   priority: { 
     type: String, 
-    enum: ['low', 'medium', 'high', 'critical'],
+    enum: ['low', 'medium', 'high', 'urgent'],
     default: 'medium'
   },
+  departmentId: { type: String, required: true },
+  teamLeadId: { type: String },
+  members: [{ type: String }],
   startDate: { type: Date, required: true },
   endDate: { type: Date },
-  estimatedHours: { type: Number, default: 0 },
-  actualHours: { type: Number, default: 0 },
-  budget: { type: Number },
-  team: {
-    lead: { type: String, required: true },
-    members: [{ type: String }],
-    stakeholders: [{ type: String }]
+  budget: { type: Number, min: 0 },
+  progress: { type: Number, min: 0, max: 100, default: 0 },
+  tags: [{ type: String, trim: true }],
+  
+  // Linear Integration
+  linearProjectId: { type: String, sparse: true, unique: true },
+  linearTeamId: { type: String },
+  linearCycleIds: [{ type: String }],
+  syncEnabled: { type: Boolean, default: false },
+  lastSyncedAt: { type: Date },
+  syncStatus: { 
+    type: String, 
+    enum: ['synced', 'pending_sync', 'sync_failed', 'not_synced'],
+    default: 'not_synced'
   },
-  tasks: [{ type: String }],
-  documents: [{ type: String }],
-  tags: [{ type: String }],
-  client: { type: String },
-  repository: { type: String },
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now }
+  lastSyncError: { type: String },
+  
+  // Metadata
+  createdBy: { type: String, required: true },
+  lastModifiedBy: { type: String, required: true },
+}, {
+  timestamps: true,
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
 });
 
-// Indexes for performance
-ProjectSchema.index({ 'team.members': 1, status: 1 });
-ProjectSchema.index({ 'team.lead': 1 });
-ProjectSchema.index({ status: 1, priority: 1 });
+// Indexes
+ProjectSchema.index({ departmentId: 1 });
+ProjectSchema.index({ status: 1 });
+ProjectSchema.index({ linearProjectId: 1 });
+ProjectSchema.index({ syncStatus: 1 });
+ProjectSchema.index({ createdAt: -1 });
+
+// Virtual for team lead
+ProjectSchema.virtual('teamLead', {
+  ref: 'Personnel',
+  localField: 'teamLeadId',
+  foreignField: '_id',
+  justOne: true
+});
+
+// Virtual for department
+ProjectSchema.virtual('department', {
+  ref: 'Department',
+  localField: 'departmentId',
+  foreignField: '_id',
+  justOne: true
+});
 
 export default mongoose.models.Project || mongoose.model<IProject>('Project', ProjectSchema); 

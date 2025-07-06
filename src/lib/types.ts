@@ -23,12 +23,25 @@ export interface Application {
   communicationEnabled: boolean;
 }
 
-export interface ApplicationWithMetadata extends Omit<Application, 'estimatedDecisionDate'> {
-  totalMessages: number;
-  unreadMessages: number;
-  versionCount: number;
-  lastLoginAt?: string;
-  estimatedDecisionDate?: Date | string; // Allow both types for compatibility
+export interface ApplicationWithMetadata {
+  _id?: string;
+  name: string;
+  email: string;
+  position?: string;
+  status: string;
+  createdAt?: string | Date;
+  updatedAt?: string | Date;
+  reviewNotes?: string;
+  estimatedDecisionDate?: Date;
+  resume?: string;
+  phone?: string;
+  location?: string;
+  github?: string;
+  linkedin?: string;
+  portfolio?: string;
+  skills?: string[];
+  experience?: string;
+  education?: string;
 }
 
 /**

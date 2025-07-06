@@ -34,6 +34,9 @@ This directory contains comprehensive documentation for the PeopleOS platform. T
 
 ### Setup Guides
 - [S3 Setup](./setup/S3_SETUP.md) - Guide for setting up S3 storage
+- [Resend Email Setup](./setup/RESEND_EMAIL_SETUP.md) - Guide for setting up Resend for email functionality
+- [Email Implementation](./setup/EMAIL_IMPLEMENTATION.md) - Technical details about email implementation
+- [Email Testing](./setup/EMAIL_TESTING.md) - Guide for testing email functionality
 
 ## Overview
 

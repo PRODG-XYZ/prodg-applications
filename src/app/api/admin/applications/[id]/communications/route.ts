@@ -14,7 +14,7 @@ export async function GET(
   try {
     await connectToDatabase();
 
-    const applicationId = params.id;
+    const { id: applicationId } = await params;
 
     // Verify application exists
     const application = await Application.findById(applicationId);
@@ -66,7 +66,7 @@ export async function POST(
     await connectToDatabase();
 
     const { message, messageType = 'message', senderType = 'admin' } = await request.json();
-    const applicationId = params.id;
+    const { id: applicationId } = await params;
 
     // Validation
     if (!message || typeof message !== 'string' || message.trim().length === 0) {
